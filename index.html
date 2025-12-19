@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rumah Impian - Temukan Hunian Terbaik Anda</title>
+    
+    <!-- Memuat Tailwind CSS dari CDN (Pengganti Bootstrap) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Internal (Menggantikan style.css dan Responsive.css) -->
+    <style>
+        /* Variabel CSS dari style.css */
+        :root {
+            --pr-color: #048853;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f3fff4;
+            scroll-behavior: smooth; /* Untuk smooth scroll tautan # */
+        }
+        
+        /* Nav & Hero Styles */
+        .hero-bg {
+            background: linear-gradient(160deg, var(--pr-color), #000);
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .nav-color {
+            background-color: #005a36 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-primary-nav {
+            width: 133px;
+            height: 40px;
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        .button-secondary-nav {
+            width: 133px;
+            height: 40px;
+            background-color: #fff;
+            color: var(--pr-color);
+            font-weight: 500;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .button-lg-secondary {
+            width: 237px;
+            height: 70px;
+            background-color: #fff;
+            color: var(--pr-color);
+            border: none;
+            font-size: 20px;
+            font-weight: 700;
+            transition: opacity 0.3s;
+        }
+        .button-lg-secondary:hover {
+            opacity: 0.9;
+        }
+        
+        /* Layanan Section */
+        #layanan, #rekomendasi {
+            padding: 100px 0;
+        }
+        .card-layanan {
+            transition: all .3s ease-in;
+            box-shadow: 0 0 7px 3px rgba(0, 0, 0, 0.055);
+            border-radius: 5px;
+            padding: 40px;
+        }
+        .card-layanan:hover { 
+            background: linear-gradient(160deg, var(--pr-color), #002E1B);
+            transform: translateY(-5px);
+        }
+        .card-layanan:hover * {
+            color: #fff !important;
+        }
+        .card-layanan:hover .circle-icon {
+            background-color: #fff;
+        }
+        .circle-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--pr-color);
+            border-radius: 50%;
+            transition: all .4s ease-in;
+        }
+
+        /* Cari Section */
+        #cari {
+            /* PATH GAMBAR DIPERBAIKI KE PNG */
+            background-image: url('Assets/Img-search.png'); 
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        .nav-link.active.cari-tab {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            color: var(--pr-color) !important;
+            border-bottom: none !important;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .nav-link.cari-tab {
+            transition: background-color 0.3s;
+        }
+        .button-primary {
+            height: 56px; /* Disesuaikan untuk input */
+            background-color: var(--pr-color);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.5rem;
+        }
+        
+        /* Rekomendasi Section */
+        .card-rekomendasi {
+            height: 440px;
+            transition: all ease-in-out .3s;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-rekomendasi:hover {
+            background: linear-gradient(170deg, var(--pr-color),#007245, #007245, #000);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .25);
+        }
+        
+        /* Fitur Section */
+        .card-fitur {
+            min-width: 300px;
+            max-width: 400px;
+            flex-shrink: 0;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .card-fitur img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .card-fitur .overlay {
+            background-color: rgba(0, 0, 0, 0);
+            opacity: 0;
+            transition: all .3s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .card-fitur:hover .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            opacity: 1;
+        }
+        #slider-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        #slider-container::-webkit-scrollbar {
+            display: none;
+        }
+        .button-arrow-left, .button-arrow-right {
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            background-color: var(--pr-color);
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .button-arrow-left:hover, .button-arrow-right:hover {
+            background-color: #007245;
+        }
+        .button-fitur {
+            width: 241px;
+            height: 63px;
+            background-color: var(--pr-color);
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #fff;
+            border-radius: 0.5rem;
+        }
+
+        /* Kontak Section */
+        #kontak {
+            /* PATH GAMBAR DIPERBAIKI KE PNG */
+            background-image: url('Assets/kontak-img.png'); 
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-top: 160px;
+            position: relative;
+        }
+        #kontak .overlay-bg {
+            background-color: rgba(0, 0, 0, .5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Modal / Dialog Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none; /* Disembunyikan secara default */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg">
+
+        <!-- Navbar -->
+        <nav class="navbar fixed w-full top-0 left-0 z-30 transition-all duration-300">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <a class="text-2xl font-bold text-white flex items-center" href="#hero">
+                    <img src="Assets/Logo Image.png" alt="Logo Rumah Impian" width="120" class="me-3">
+                    
+                </a>
+                
+                <button class="md:hidden text-white focus:outline-none" onclick="document.getElementById('navbarNav').classList.toggle('hidden')">
+                    <!-- Hamburger Icon -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+
+                <div class="hidden md:flex flex-col md:flex-row md:space-x-8 items-center" id="navbarNav">
+                    <ul class="flex flex-col md:flex-row md:space-x-6 text-white font-semibold">
+                        <li><a class="nav-link block p-2 hover:bg-green-700/50 rounded" href="#hero">Beranda</a></li>
+                        <li><a class="nav-link block p-2 hover:bg-green-700/50 rounded" href="#layanan">Layanan</a></li>
+                        <li><a class="nav-link block p-2 hover:bg-green-700/50 rounded" href="#fitur">Fitur</a></li>
+                        <li><a class="nav-link block p-2 hover:bg-green-700/50 rounded" href="#kontak">Kontak</a></li>
+                    </ul>
+                    <div class="mt-4 md:mt-0 md:space-x-3 flex flex-col md:flex-row">
+                        <!-- Tombol Daftar/Masuk menggunakan fungsi JS baru -->
+                        <button class="button-primary-nav rounded-lg mb-2 md:mb-0 hover:bg-white hover:text-green-700" onclick="showAuthModal('Daftar')">Daftar</button>
+                        <button class="button-secondary-nav rounded-lg" onclick="showAuthModal('Masuk')">Masuk</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Tagline -->
+        <div class="container mx-auto px-4 h-full flex items-center">
+            <div class="row w-full flex">
+                <div class="lg:w-1/2 md:w-full hero-tagline my-auto px-4 md:px-0">
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+                        Membantu Temukan Rumah Impian.
+                    </h1>
+                    <p class="text-lg text-white opacity-80 mb-10 max-w-lg">
+                        <span class="font-bold">Rumah Impian </span>hadir untuk Temukan rumah terbaik untukmu, untuk dijual ataupun disewa dengan sumber terpecaya.
+                    </p>
+                    <a href="#cari" class="button-lg-secondary rounded-xl me-4 inline-flex items-center justify-center">Temukan Rumah </a>
+                    <a href="#rekomendasi" class="inline-block">
+                        <img src="Assets/Right Arrow.png" alt="Lihat Rekomendasi">
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Gambar Hero Image di kanan bawah -->
+            <!-- PATH DIPERBAIKI: Hero Image.png -->
+            <img src="Assets/Hero Image.png" class="absolute right-0 bottom-0 h-full max-h-[90vh] object-cover z-0 hidden lg:block" alt="Rumah Impian" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x600/10B981/ffffff?text=Hero+Asset+Gagal';">
+            
+            <!-- Tambahan Accsent 1.png -->
+            <!-- PATH DIPERBAIKI: Accsent 1.png -->
+            <img src="Assets/Accsent 1.png" class="absolute top-0 left-0 h-full w-auto opacity-50 z-10" alt="Aksen Desain"
+                 onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==';">
+
+        </div>
+    </section>
+    <!-- End Hero Section -->
+
+    <!-- Layanan Kami -->
+    <section id="layanan" class="py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-[var(--pr-color)] mb-2">Layanan Kami</h2>
+                <span class="text-lg text-gray-600">Rumah Impian hadir untuk menjadi solusi bagi kamu</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center mt-12 gap-8">
+                <!-- Card 1: Property Baru -->
+                <div class="w-full sm:w-1/2 lg:w-1/4 text-center">
+                    <div class="card-layanan bg-white rounded-lg transition duration-300">
+                        <div class="circle-icon relative mx-auto flex items-center justify-center mb-4">
+                            <img src="Assets/Icon-propertybaru.png" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 transition-transform duration-300" alt="Property Baru Icon">
+                        </div>
+                        <h3 class="mt-4 text-xl font-semibold text-gray-800">Property Baru</h3>
+                        <p class="mt-3 text-sm text-gray-500">Rumah impian kini jadi kenyataan, Beli rumah baru dengan fasilitas terbaik dengan lingkungan yang nyaman.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Sewa Rumah -->
+                <div class="w-full sm:w-1/2 lg:w-1/4 text-center">
+                    <div class="card-layanan bg-white rounded-lg transition duration-300">
+                        <div class="circle-icon relative mx-auto flex items-center justify-center mb-4">
+                            <img src="Assets/Icon Sewa.png" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 transition-transform duration-300" alt="Sewa Rumah Icon">
+                        </div>
+                        <h3 class="mt-4 text-xl font-semibold text-gray-800">Sewa Rumah</h3>
+                        <p class="mt-3 text-sm text-gray-500">Sewa rumah yang indah untuk keluarga anda, pilihan terbaik untuk tempat tinggal keluarga mu.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Beli Rumah -->
+                <div class="w-full sm:w-1/2 lg:w-1/4 text-center">
+                    <div class="card-layanan bg-white rounded-lg transition duration-300">
+                        <div class="circle-icon relative mx-auto flex items-center justify-center mb-4">
+                            <img src="Assets/Icon Beli.png" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 transition-transform duration-300" alt="Beli Rumah Icon">
+                        </div>
+                        <h3 class="mt-4 text-xl font-semibold text-gray-800">Beli Rumah</h3>
+                        <p class="mt-3 text-sm text-gray-500">Beli Rumah sempurna dengan harga terbaik kualitas terjamin dari sumber <br>terpercaya.</br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Layanan Kami -->
+
+    <!-- Cari Rumah -->
+    <section id="cari" class="flex items-center">
+        <div class="container mx-auto px-4 py-20">
+            <div class="row">
+                <div class="text-center w-full mb-10">
+                    <h2 class="text-5xl font-medium text-white mb-4">Temukan Rumah Impianmu</h2>
+                    <p class="text-xl font-light text-white mx-auto max-w-2xl">sekarang Anda dapat menghemat semua hal stres, waktu, dan biaya tersembunyi, dengan ratusan rumah untuk anda</p>
+                </div>
+
+                <div class="w-full lg:w-10/12 mx-auto">
+                    <!-- Nav Tab -->
+                    <div class="flex space-x-2 mb-2">
+                        <button class="nav-link cari-tab active px-4 py-3 text-base bg-white/80 text-[var(--pr-color)] font-semibold rounded-t-lg" data-target="#tab-beli">Beli</button>
+                        <button class="nav-link cari-tab px-4 py-3 text-base bg-white/50 text-black rounded-t-lg hover:bg-white/70" data-target="#tab-sewa">Sewa</button>
+                        <button class="nav-link cari-tab px-4 py-3 text-base bg-white/50 text-black rounded-t-lg hover:bg-white/70" data-target="#tab-property">Property Baru</button>
+                    </div>
+
+                    <div class="tab-content bg-white/80 p-6 rounded-b-lg shadow-lg">
+                        <!-- Tab Beli -->
+                        <div id="tab-beli" class="tab-pane active" role="tabpanel">
+                            <form onsubmit="handleSearch(event)">
+                                <div class="flex flex-wrap gap-4 items-center">
+                                    <!-- Dropdown 1: Tipe Rumah (DENGAN ICON) -->
+                                    <div class="relative flex-1 min-w-[150px]">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
+                                            <img src="Assets/Home Icon.png" alt="Home Icon" class="w-5 h-5">
+                                        </span>
+                                        <select name="tipe_rumah" class="p-3 pl-10 bg-white border border-gray-300 rounded-lg w-full appearance-none focus:ring-2 focus:ring-[var(--pr-color)]">
+                                            <option>Tipe Rumah</option>
+                                            <option>Minimalis</option>
+                                            <option>Modern</option>
+                                        </select>
+                                    </div>
+                                    <!-- Dropdown 2: Range Harga (DENGAN ICON) -->
+                                    <div class="relative flex-1 min-w-[150px]">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
+                                            <img src="Assets/Money-icon.png" alt="Money Icon" class="w-5 h-5">
+                                        </span>
+                                        <select name="range_harga" class="p-3 pl-10 bg-white border border-gray-300 rounded-lg w-full appearance-none focus:ring-2 focus:ring-[var(--pr-color)]">
+                                            <option>Range Harga</option>
+                                            <option>&lt; 200 Jt</option>
+                                            <option>200 Jt - 500 Jt</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input Pencarian -->
+                                    <input type="text" name="keyword" class="p-3 border border-gray-300 rounded-lg flex-grow min-w-[200px] focus:ring-2 focus:ring-[var(--pr-color)]" placeholder="Cari berdasarkan ID, Lokasi">
+                                    <!-- Tombol Cari -->
+                                    <button type="submit" class="button-primary p-3 bg-[var(--pr-color)] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">Cari</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Tab Sewa & Property Baru (Dibuat sederhana) -->
+                        <div id="tab-sewa" class="tab-pane hidden" role="tabpanel">
+                            <p class="text-gray-700">Fungsi pencarian untuk **Sewa Rumah** akan ditempatkan di sini. Klik Cari untuk simulasi.</p>
+                            <form onsubmit="handleSearch(event)">
+                                <button type="submit" class="button-primary p-3 bg-[var(--pr-color)] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity mt-4">Cari Sewa</button>
+                            </form>
+                        </div>
+                        <div id="tab-property" class="tab-pane hidden" role="tabpanel">
+                            <p class="text-gray-700">Fungsi pencarian untuk **Property Baru** akan ditempatkan di sini. Klik Cari untuk simulasi.</p>
+                            <form onsubmit="handleSearch(event)">
+                                <button type="submit" class="button-primary p-3 bg-[var(--pr-color)] text-white font-semibold rounded-lg hover:opacity-90 transition-opacity mt-4">Cari Property Baru</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End-cari Rumah -->
+
+    <!-- Rekomendasi Rumah  -->
+    <section id="rekomendasi" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-[var(--pr-color)]">Rekomendasi Rumah</h2>
+            </div>
+
+            <div id="search-results-area" class="flex flex-wrap justify-center -mx-4 gap-y-12">
+                <!-- HASIL PENCARIAN AKAN MUNCUL DI SINI SECARA SIMULASI -->
+
+                <!-- Card Rekomendasi 1 (Default) -->
+                <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-4 default-result" data-tipe="Minimalis" data-harga="350000000" data-kategori="Jual">
+                    <div class="card-rekomendasi bg-white rounded-xl overflow-hidden shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Rekomendasi1.png" class="w-full h-48 object-cover" alt="Rumah Rekomendasi 1" onerror="this.onerror=null; this.src='https://placehold.co/400x300/CCCCCC/333333?text=Asset+1+Gagal';">
+                        <div class="p-4">
+                            <!-- HARGA BARU -->
+                            <h4 class="text-xl font-bold text-gray-800">IDR. 120.000.000</h4>
+                            <!-- JALAN BARU -->
+                            <p class="text-sm text-gray-600 mb-4">Jl. Melati Raya No. 15 <br> <span class="text-red-500 font-semibold">Jual</span></p>
+
+                            <div class="flex justify-between items-center text-sm text-gray-700">
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Tidur.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    3<p class="text-xs">Kamar Tidur</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Mandi.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    4<p class="text-xs">Kamar Mandi</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Luas Tanah.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    360<p class="text-xs">Luas Tanah</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Rekomendasi 2 (Default) -->
+                <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-4 default-result" data-tipe="Modern" data-harga="525000000" data-kategori="Sewa">
+                    <div class="card-rekomendasi bg-white rounded-xl overflow-hidden shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Rekomendasi6.png" class="w-full h-48 object-cover" alt="Rumah Rekomendasi 2" onerror="this.onerror=null; this.src='https://placehold.co/400x300/CCCCCC/333333?text=Asset+2+Gagal';">
+                        <div class="p-4">
+                            <!-- HARGA BARU -->
+                            <h4 class="text-xl font-bold text-gray-800">IDR. 525.000.000</h4>
+                            <!-- JALAN BARU -->
+                            <p class="text-sm text-gray-600 mb-4">Jl. Kenanga Indah No. 22 <br> <span class="text-red-500 font-semibold">Sewa</span></p>
+
+                            <div class="flex justify-between items-center text-sm text-gray-700">
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Tidur.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    3<p class="text-xs">Kamar Tidur</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Mandi.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    4<p class="text-xs">Kamar Mandi</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Luas Tanah.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    360<p class="text-xs">Luas Tanah</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Rekomendasi 3 (Default) -->
+                <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-4 default-result" data-tipe="Minimalis" data-harga="1200000000" data-kategori="Jual">
+                    <div class="card-rekomendasi bg-white rounded-xl overflow-hidden shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Rekomendasi2.png" class="w-full h-48 object-cover" alt="Rumah Rekomendasi 3" onerror="this.onerror=null; this.src='https://placehold.co/400x300/CCCCCC/333333?text=Asset+3+Gagal';">
+                        <div class="p-4">
+                            <!-- HARGA BARU -->
+                            <h4 class="text-xl font-bold text-gray-800">IDR. 1.200.000.000</h4>
+                            <!-- JALAN BARU -->
+                            <p class="text-sm text-gray-600 mb-4">Jl. Cendana Elok No. 7 <br> <span class="text-red-500 font-semibold">Jual</span></p>
+
+                            <div class="flex justify-between items-center text-sm text-gray-700">
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Tidur.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    3<p class="text-xs">Kamar Tidur</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Mandi.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    4<p class="text-xs">Kamar Mandi</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Luas Tanah.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    360<p class="text-xs">Luas Tanah</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Rekomendasi 4 (Default) -->
+                <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-4 default-result" data-tipe="Modern" data-harga="95000000" data-kategori="Sewa">
+                    <div class="card-rekomendasi bg-white rounded-xl overflow-hidden shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Rekomendasi4.png" class="w-full h-48 object-cover" alt="Rumah Rekomendasi 4" onerror="this.onerror=null; this.src='https://placehold.co/400x300/CCCCCC/333333?text=Asset+4+Gagal';">
+                        <div class="p-4">
+                            <!-- HARGA BARU -->
+                            <h4 class="text-xl font-bold text-gray-800">IDR. 95.000.000</h4>
+                            <!-- JALAN BARU -->
+                            <p class="text-sm text-gray-600 mb-4">Jl. Sukamaju No. 50 <br> <span class="text-red-500 font-semibold">Sewa</span></p>
+
+                            <div class="flex justify-between items-center text-sm text-gray-700">
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Tidur.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    3<p class="text-xs">Kamar Tidur</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Mandi.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    4<p class="text-xs">Kamar Mandi</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Luas Tanah.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    360<p class="text-xs">Luas Tanah</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="#fitur" class="text-decoration-none text-gray-600 font-semibold hover:text-[var(--pr-color)] transition-colors">Lihat Lainnya...</a>
+            </div>
+        </div>
+
+    </section>
+    <!-- end Rekomendasi Rumah -->
+
+    <!-- Fitur Rumah -->
+    <section id="fitur" class="overflow-hidden py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-4xl font-bold text-[var(--pr-color)]">Fitur Rumah</h2>
+                <button class="button-fitur px-6 py-3 bg-[var(--pr-color)] text-white font-medium rounded-lg flex items-center hover:opacity-90 transition-opacity">Lihat Semua...
+                    <img src="Assets/Right Arrow.png" class="ms-3 w-2" alt="">
+                </button>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 mt-5 relative">
+            <div class="row">
+                <!-- Slider Container -->
+                <div class="col-12 flex space-x-4" id="slider-container" style="overflow-x: scroll; overflow-y: hidden; cursor: grab; padding-bottom: 1rem;">
+                    
+                    <div class="card-fitur shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Fitur Rumah 1.png" alt="Ruang Tamu 1">
+                        <div class="overlay absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <h5 class="text-3xl font-semibold text-white">Ruang Tamu</h5>
+                                <span class="text-sm text-white/90">Rumah Minimalis Type A-21</span>
+                                <h6 class="text-xl font-bold text-white mt-2">IDR. 200JT</h6>
+                                <button class="mt-4 px-4 py-2 bg-[var(--pr-color)] text-white font-medium rounded hover:bg-[#007245]">Lihat Rumah</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-fitur shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Fitur Rumah 2.png" alt="Ruang Tamu 2">
+                        <div class="overlay absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <h5 class="text-3xl font-semibold text-white">Ruang Keluarga</h5>
+                                <span class="text-sm text-white/90">Rumah Minimalis Type A-21</span>
+                                <h6 class="text-xl font-bold text-white mt-2">IDR. 200JT</h6>
+                                <button class="mt-4 px-4 py-2 bg-[var(--pr-color)] text-white font-medium rounded hover:bg-[#007245]">Lihat Rumah</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-fitur shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Fitur Rumah 3.png" alt="Kamar Tidur">
+                        <div class="overlay absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <h5 class="text-3xl font-semibold text-white">Kamar Tidur</h5>
+                                <span class="text-sm text-white/90">Rumah Minimalis Type A-21</span>
+                                <h6 class="text-xl font-bold text-white mt-2">IDR. 200JT</h6>
+                                <button class="mt-4 px-4 py-2 bg-[var(--pr-color)] text-white font-medium rounded hover:bg-[#007245]">Lihat Rumah</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contoh Tambahan -->
+                    <div class="card-fitur shadow-xl">
+                        <!-- Ekstensi file diubah ke PNG -->
+                        <img src="Assets/Fitur Rumah 4.png" alt="Dapur">
+                        <div class="overlay absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <h5 class="text-3xl font-semibold text-white">Dapur</h5>
+                                <span class="text-sm text-white/90">Rumah Minimalis Type A-21</span>
+                                <h6 class="text-xl font-bold text-white mt-2">IDR. 200JT</h6>
+                                <button class="mt-4 px-4 py-2 bg-[var(--pr-color)] text-white font-medium rounded hover:bg-[#007245]">Lihat Rumah</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <button class="button-arrow-left absolute left-0 top-1/2 -translate-y-1/2 ml-4" onclick="scrollSlider(-1)">
+                <img src="Assets/Left Arrow lg.png" alt="Panah Kiri" class="w-4 h-4">
+            </button>
+            <button class="button-arrow-right absolute right-0 top-1/2 -translate-y-1/2 mr-4" onclick="scrollSlider(1)">
+                <img src="Assets/Right Arrow lg.png" alt="Panah Kanan" class="w-4 h-4">
+            </button>
+        </div>
+    </section>
+    <!-- End Fitur Rumah -->
+
+    <!-- Contact -->
+    <section id="kontak" class="py-24">
+        <div class="overlay-bg"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-wrap -mx-4">
+                <div class="w-full md:w-1/2 px-4 mb-10 text-white">
+                    <h3 class="text-4xl font-bold mb-8 max-w-lg">Butuh Konsultasi..? Silahkan Kontak Kami, Kami Siap Membantu</h3>
+                    <div class="kontak space-y-6">
+                        <h6 class="text-xl font-semibold border-b border-white/50 pb-2">Kontak</h6>
+
+                        <div class="alamat flex items-start space-x-3">
+                            <img src="Assets/Alamat Icon.png" alt="Alamat Icon" class="w-6 h-6 mt-1">
+                            <a href="#" class="inline-block text-lg">Jl. Bojong Becik No.30-45 Majalaya Bandung 40383 Indonesia</a>
+                        </div>
+
+                        <div class="whatsapp flex items-center space-x-3">
+                            <img src="Assets/Whatsapp icon.png" alt="Whatsapp icon" class="w-6 h-6">
+                            <a href="#" class="text-lg">022-655422321</a>
+                        </div>
+
+                        <div class="email flex items-center space-x-3">
+                            <img src="Assets/Email Icon.png" alt="Email Icon" class="w-6 h-6">
+                            <a href="#" class="text-lg">Rumahimpian@gmail.com</a>
+                        </div>
+
+                        <h6 class="text-xl font-semibold border-b border-white/50 pb-2 mt-8">Social Media</h6>
+                        <div class="flex items-center space-x-4">
+                            <a href="#"><img src="Assets/Facebook Icon.png" alt="Facebook Icon" class="w-8 h-8"> </a>
+                            <a href="#"><img src="Assets/Twiter Icon.png" alt="Twitter Icon" class="w-8 h-8"></a>
+                            <a href="#"><img src="Assets/Instagram Iicon.png" alt="Instagram Icon" class="w-8 h-8"></a>
+                            <a href="#" class="text-lg font-semibold">Rumah Impian</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 px-4">
+                    <div class="card-contact bg-white p-12 rounded-xl shadow-2xl">
+                        <form onsubmit="handleContactForm(event)">
+                            <div class="mb-4">
+                                <input type="text" class="w-full p-4 bg-gray-200 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--pr-color)] placeholder-gray-600" id="floatingInputNama" placeholder="Nama Anda" required>
+                            </div>
+                            <div class="mb-4">
+                                <textarea class="w-full p-4 bg-gray-200 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--pr-color)] placeholder-gray-600" id="floatingInputPertanyaan" placeholder="Ada Pertanyaan..?" rows="6" required></textarea>
+                            </div>
+                            <button type="submit" class="button-kontak w-full py-4 bg-[var(--pr-color)] text-white font-semibold text-xl rounded-lg hover:opacity-90 transition-opacity">Kirim</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-wrap justify-between items-center border-b border-gray-700 pb-4 mb-4">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <img src="Assets/Logo Icon.png" alt="" class="w-8 h-8">
+                    <a href="#" class="text-lg font-semibold ms-3 hover:text-[var(--pr-color)]">Rumah Impian</a>
+                </div>
+                <div class="flex flex-wrap justify-center space-x-4 text-sm font-semibold">
+                    <a href="#hero" class="hover:text-[var(--pr-color)]">Beranda</a>
+                    <a href="#layanan" class="hover:text-[var(--pr-color)]">Layanan</a>
+                    <a href="#fitur" class="hover:text-[var(--pr-color)]">Fitur</a>
+                    <a href="#kontak" class="hover:text-[var(--pr-color)]">Kontak</a>
+                    <a href="#hero" class="hover:text-[var(--pr-color)]">Masuk</a>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-sm text-gray-400">
+                    Copyright by Creative Academy Indonesia All Right Reserved 2021
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- end footer -->
+
+    <!-- MODAL SIMULASI (Daftar/Masuk) -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title" class="text-2xl font-bold mb-4 text-[var(--pr-color)]">Daftar</h3>
+            <p id="modal-message" class="mb-6 text-gray-700">Simulasi berhasil! Anda telah mencoba fitur ini.</p>
+            
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                <input type="email" id="auth-email" class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-[var(--pr-color)] focus:border-[var(--pr-color)]" placeholder="Email" required>
+                <input type="password" id="auth-password" class="w-full p-3 mb-6 border border-gray-300 rounded-lg focus:ring-[var(--pr-color)] focus:border-[var(--pr-color)]" placeholder="Password" required>
+                <button type="submit" class="w-full py-3 bg-[var(--pr-color)] text-white font-semibold rounded-lg hover:bg-[#007245]">Konfirmasi</button>
+            </form>
+            <button onclick="closeAuthModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT MURNI (Pengganti Bootstrap JS) -->
+    <script>
+        // 4. Fungsi Kontak (Simulasi)
+        function handleContactForm(event) {
+            event.preventDefault();
+            
+            const submitButton = event.target.querySelector('.button-kontak');
+            const originalText = submitButton.textContent;
+            
+            // Menggantikan alert/confirm
+            submitButton.textContent = 'Pesan Terkirim!';
+            submitButton.style.backgroundColor = '#00CC66'; // Hijau muda untuk sukses
+            
+            setTimeout(() => {
+                submitButton.textContent = originalText;
+                submitButton.style.backgroundColor = 'var(--pr-color)';
+                event.target.reset(); 
+            }, 3000);
+        }
+
+        // 5. Fungsi untuk Mengganti Tab di Bagian Cari Rumah
+        document.querySelectorAll('#cari .nav-link').forEach(button => {
+            button.addEventListener('click', function() {
+                // Hapus kelas aktif dari semua tombol
+                document.querySelectorAll('#cari .nav-link').forEach(btn => {
+                    btn.classList.remove('active', 'bg-white/80', 'text-[var(--pr-color)]');
+                    btn.classList.add('bg-white/50', 'text-black');
+                });
+                // Sembunyikan semua tab pane
+                document.querySelectorAll('#myTabContent .tab-pane').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+
+                // Tampilkan tab yang dipilih
+                const targetId = this.getAttribute('data-target');
+                document.querySelector(targetId).classList.remove('hidden');
+
+                // Aktifkan visual tombol
+                this.classList.add('active', 'bg-white/80', 'text-[var(--pr-color)]');
+                this.classList.remove('bg-white/50', 'text-black');
+            });
+        });
+        
+        // **********************************************
+        // FUNGSI BARU UNTUK PENCARIAN RUMAH (SIMULASI)
+        // **********************************************
+        
+        // Data simulasi rumah (sesuai kriteria input)
+        const simulatedHouses = [
+            { id: 1, img: 'Assets/Rekomendasi1.png', harga: '120.000.000', jalan: 'Jl. Melati Raya No. 15', tipe: 'Minimalis', range: '< 200 Jt', kategori: 'Jual' },
+            { id: 2, img: 'Assets/Rekomendasi6.png', harga: '525.000.000', jalan: 'Jl. Kenanga Indah No. 22', tipe: 'Modern', range: '200 Jt - 500 Jt', kategori: 'Sewa' },
+            { id: 3, img: 'Assets/Rekomendasi2.png', harga: '1.200.000.000', jalan: 'Jl. Cendana Elok No. 7', tipe: 'Minimalis', range: '> 500 Jt', kategori: 'Jual' },
+            { id: 4, img: 'Assets/Rekomendasi4.png', harga: '95.000.000', jalan: 'Jl. Sukamaju No. 50', tipe: 'Modern', range: '< 200 Jt', kategori: 'Sewa' },
+            { id: 5, img: 'Assets/Rekomendasi3.png', harga: '800.000.000', jalan: 'Jl. Mawar Merah No. 3', tipe: 'Klasik', range: '> 500 Jt', kategori: 'Jual' },
+            { id: 6, img: 'Assets/Rekomendasi5.png', harga: '250.000.000', jalan: 'Jl. Anggrek Biru No. 1', tipe: 'Minimalis', range: '200 Jt - 500 Jt', kategori: 'Jual' },
+        ];
+
+        // Fungsi pembantu untuk membuat markup kartu rumah
+        function createHouseCard(house) {
+            return `
+                <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-4">
+                    <div class="card-rekomendasi bg-white rounded-xl overflow-hidden shadow-xl">
+                        <img src="${house.img}" class="w-full h-48 object-cover" alt="Rumah Rekomendasi" onerror="this.onerror=null; this.src='https://placehold.co/400x300/CCCCCC/333333?text=Asset+Gagal';">
+                        <div class="p-4">
+                            <h4 class="text-xl font-bold text-gray-800">IDR. ${house.harga}</h4>
+                            <p class="text-sm text-gray-600 mb-4">${house.jalan} <br> <span class="text-red-500 font-semibold">${house.kategori}</span></p>
+
+                            <div class="flex justify-between items-center text-sm text-gray-700">
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Tidur.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    3<p class="text-xs">Kamar Tidur</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Kamar Mandi.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    4<p class="text-xs">Kamar Mandi</p>
+                                </span>
+                                <span class="text-center">
+                                    <img src="Assets/Icon Luas Tanah.png" alt="" class="w-6 h-6 mx-auto mb-1">
+                                    360<p class="text-xs">Luas Tanah</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const form = event.target;
+            
+            // 1. Kumpulkan kriteria pencarian
+            const keyword = form.querySelector('input[name="keyword"]')?.value.toLowerCase() || '';
+            const tipe = form.querySelector('select[name="tipe_rumah"]')?.value;
+            const range = form.querySelector('select[name="range_harga"]')?.value;
+            
+            // Tentukan kategori (Beli/Sewa/Properti Baru) berdasarkan tab yang aktif
+            const activeTab = document.querySelector('.nav-link.cari-tab.active');
+            let kategori = 'Jual'; 
+            if (activeTab.getAttribute('data-target') === '#tab-sewa') kategori = 'Sewa';
+            if (activeTab.getAttribute('data-target') === '#tab-property') kategori = 'Jual'; // Asumsi Properti Baru defaultnya Dijual
+            
+            const resultsArea = document.getElementById('search-results-area');
+            let filteredResults = [];
+
+            // 2. Filter data simulasi berdasarkan kriteria
+            filteredResults = simulatedHouses.filter(house => {
+                const keywordMatch = keyword === '' || house.jalan.toLowerCase().includes(keyword) || house.tipe.toLowerCase().includes(keyword);
+                const tipeMatch = tipe === 'Tipe Rumah' || house.tipe === tipe;
+                const rangeMatch = range === 'Range Harga' || house.range === range;
+                
+                // Kategori Jual/Sewa harus cocok (Properti Baru mengarah ke filter Jual/Sewa)
+                const kategoriMatch = house.kategori === kategori;
+
+                return keywordMatch && tipeMatch && rangeMatch && kategoriMatch;
+            });
+
+
+            // 3. Bangun hasil output
+            let outputHtml = '';
+            
+            if (filteredResults.length > 0) {
+                // KASUS DITEMUKAN
+                outputHtml += `
+                    <div class="w-full text-center py-6">
+                        <h3 class="text-2xl font-bold text-[var(--pr-color)]">Hasil Pencarian Ditemukan!</h3>
+                        <p class="text-lg text-gray-600">Ditemukan ${filteredResults.length} rumah terbaik untuk: ${keyword || 'Semua Lokasi'} | Tipe: ${tipe} | Harga: ${range}</p>
+                        <p class="text-sm text-gray-500 mt-4">Simulasi: Menampilkan rumah berdasarkan kriteria Anda.</p>
+                    </div>
+                `;
+                filteredResults.forEach(house => {
+                    outputHtml += createHouseCard(house);
+                });
+
+            } else {
+                // KASUS TIDAK DITEMUKAN
+                outputHtml = `
+                    <div class="w-full text-center py-12 bg-yellow-50 rounded-lg shadow-md border-l-4 border-yellow-500">
+                        <h3 class="text-3xl font-bold text-gray-800">Maaf, Rumah Tidak Ditemukan.</h3>
+                        <p class="text-lg text-gray-600 mt-2">Tidak ada hasil yang cocok untuk kriteria: ${keyword || 'Semua Lokasi'} | Tipe: ${tipe} | Harga: ${range}</p>
+                        <p class="text-sm text-gray-500 mt-4">Coba ubah filter pencarian Anda atau hubungi kami untuk konsultasi.</p>
+                        <button onclick="document.getElementById('kontak').scrollIntoView({behavior: 'smooth'})" class="mt-6 px-6 py-3 bg-[var(--pr-color)] text-white font-semibold rounded-lg hover:bg-[#007245]">Hubungi Kami</button>
+                    </div>
+                `;
+            }
+            
+            // 4. Update DOM dan Scroll
+            resultsArea.innerHTML = outputHtml;
+            document.getElementById('rekomendasi').scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        // **********************************************
+        // FUNGSI BARU UNTUK MODAL OTENTIKASI
+        // **********************************************
+        function showAuthModal(type) {
+            const modal = document.getElementById('auth-modal');
+            const title = document.getElementById('modal-title');
+            const message = document.getElementById('modal-message');
+            const form = document.getElementById('auth-form');
+            
+            title.textContent = type;
+            message.textContent = `Silakan masukkan email dan password untuk ${type}. (Ini adalah simulasi)`;
+            
+            // Atur modal agar terlihat
+            modal.style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const title = document.getElementById('modal-title').textContent;
+            
+            const email = form.querySelector('#auth-email').value;
+            
+            alert(`Simulasi berhasil! Anda telah melakukan ${title} dengan email: ${email}.`);
+            
+            form.reset();
+            closeAuthModal();
+        }
+        // Menambahkan listener untuk menutup modal jika overlay diklik
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuthModal();
+            }
+        });
+        
+    </script>
+    
+    <!-- My Script (Link ke js/script.js) -->
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
